@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Lehigh University Chatbot</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="chat-container">
+        <div id="chatbox" class="chat-area"></div>
+        <div class="user-input">
+            <input type="text" id="userInput" class="input-box">
+            <button onclick="sendMessage()" class="send-btn">Send</button>
+        </div>
+    </div>
+
+    <script>
+        function sendMessage() {
+            var userInput = document.getElementById("userInput").value;
+            document.getElementById("chatbox").innerHTML += "<p class='user-response'>User: " + userInput + "</p>";
+
+            fetch('/get_response', {
+                method: 'POST',
+                body: 'user_input=' + userInput,
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                var botResponse = data.response;
+                document.getElementById("chatbox").innerHTML += "<p class='bot-response'>Clutch: " + botResponse + "</p>";
+            });
+        }
+    </script>
+</body>
+</html>
+
